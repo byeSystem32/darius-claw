@@ -15,19 +15,18 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-              set -e
+            set -e
 
-              cd /tmp
-              rm -rf darius-deploy
-              git clone https://github.com/byeSystem32/darius-claw.git darius-deploy
-            
-              # Replace workspace
-              rm -rf /srv/darius-claw/workspace
-              cp -r darius-deploy/workspace /srv/darius-claw/
-            
-              # Replace config (optional)
-              rm -rf /srv/darius-claw/config
-              cp -r darius-deploy/config /srv/darius-claw/
-            
-              # Restart container
-              docker compose -p darius-claw --env-file /srv/darius-claw.env restart
+            cd /tmp
+            rm -rf darius-deploy
+            git clone https://github.com/byeSystem32/darius-claw.git darius-deploy
+
+            # Replace workspace only (config stays on VPS)
+            rm -rf /srv/darius-claw/workspace
+            cp -r darius-deploy/workspace /srv/darius-claw/
+
+            # Clean up
+            rm -rf darius-deploy
+
+            # Restart container
+            docker compose -p darius-claw --env-file /srv/darius-claw.env restart
