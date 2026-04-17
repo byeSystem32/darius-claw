@@ -1,0 +1,33 @@
+name: Deploy darius-claw to VPS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+              set -e
+
+              cd /tmp
+              rm -rf darius-deploy
+              git clone https://github.com/byeSystem32/darius-claw.git darius-deploy
+            
+              # Replace workspace
+              rm -rf /srv/darius-claw/workspace
+              cp -r darius-deploy/workspace /srv/darius-claw/
+            
+              # Replace config (optional)
+              rm -rf /srv/darius-claw/config
+              cp -r darius-deploy/config /srv/darius-claw/
+            
+              # Restart container
+              docker compose -p darius-claw --env-file /srv/darius-claw.env restart
