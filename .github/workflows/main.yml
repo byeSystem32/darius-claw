@@ -21,12 +21,12 @@ jobs:
             rm -rf darius-deploy
             git clone https://github.com/byeSystem32/darius-claw.git darius-deploy
 
-            # Replace workspace only (config stays on VPS)
-            rm -rf /srv/darius-claw/workspace
-            cp -r darius-deploy/workspace /srv/darius-claw/
+            mkdir -p /srv/darius-claw/workspace
+            rsync -av --delete /tmp/darius-deploy/workspace/ /srv/darius-claw/workspace/
 
-            # Clean up
-            rm -rf darius-deploy
+            rm -rf /tmp/darius-deploy
 
-            # Restart container
-            docker compose -p darius-claw --env-file /srv/darius-claw.env restart
+            cd /opt/openclaw
+            docker compose -p darius-claw --env-file /srv/darius-claw.env up -d
+            docker compose -p darius-claw --env-file /srv/darius-claw.env ps
+            docker logs --tail=50 darius-claw-openclaw-gateway-1
