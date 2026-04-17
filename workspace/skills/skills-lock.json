@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "kalshi": {
+      "source": "machina-sports/sports-skills",
+      "sourceType": "github",
+      "computedHash": "70e9410477f0551b0fb0e794fa450b080314a79f872835574d500f32d136f7cf"
+    }
+  }
+}

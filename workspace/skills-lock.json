@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "computedHash": "fc173a14ecea820739ea971bf81eddbf94e12ce99312fb83e55342724316c5dd"
+    },
+    "kalshi-trader": {
+      "source": "local",
+      "sourceType": "local",
+      "computedHash": "kalshi-trader-v1-2026-04-15"
+    }
+  }
+}
