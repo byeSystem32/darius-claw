@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Multi-User Config Loader
- * Loads Alpaca credentials from environment variables or a local .env file.
+ * Loads Alpaca credentials from OpenClaw-injected env vars or a local .env file.
  */
 
 const fs = require("fs");

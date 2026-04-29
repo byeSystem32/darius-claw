@@ -115,8 +115,8 @@ const commands = {
     console.log(`  User: ${config.userId || "unknown"}`);
     if (!API_KEY || !API_SECRET) {
       console.log("\n⚠️ 请先配置 Alpaca API keys:");
-      console.log("   cp .env.example .env");
-      console.log("   Then fill in ALPACA_API_KEY and ALPACA_API_SECRET");
+      console.log("   Configure ALPACA_API_KEY and ALPACA_API_SECRET as OpenClaw secrets");
+      console.log("   For local development: cp .env.example .env");
     }
     return { configured: !!API_KEY && !!API_SECRET };
   },

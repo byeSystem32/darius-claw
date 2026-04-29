@@ -26,13 +26,27 @@ Trade US stocks and crypto via Alpaca API. Supports both **paper trading** (simu
 
 ## Credential Setup
 
-Create a local `.env` file from `.env.example`:
+For OpenClaw, configure these as secrets so they are injected as environment variables:
+
+```bash
+ALPACA_API_KEY
+ALPACA_API_SECRET
+```
+
+Optional endpoints can also be provided as secrets/env vars:
+
+```bash
+ALPACA_BASE_URL=https://paper-api.alpaca.markets
+ALPACA_DATA_URL=https://data.alpaca.markets
+```
+
+For local development only, create a `.env` file from `.env.example`:
 
 ```bash
 cp .env.example .env
 ```
 
-Then fill in:
+Then fill in the local `.env` file:
 
 ```bash
 ALPACA_API_KEY=YOUR_KEY
@@ -41,9 +55,7 @@ ALPACA_BASE_URL=https://paper-api.alpaca.markets
 ALPACA_DATA_URL=https://data.alpaca.markets
 ```
 
-To switch to real trading, change `ALPACA_BASE_URL` to `https://api.alpaca.markets`.
-
-You can also set these as shell environment variables instead of using `.env`.
+To switch to real trading, set `ALPACA_BASE_URL` to `https://api.alpaca.markets`.
 
 ## First-Time User Flow
 
@@ -99,7 +111,7 @@ node {baseDir}/scripts/trading.js strategy-rsi AAPL  # RSI mean reversion
 
 1. Sign up at https://app.alpaca.markets/brokerage/new-account
 2. Generate API key + secret (Paper Trading section)
-3. Create `.env` from `.env.example` or set env vars
+3. Configure OpenClaw secrets or create a local `.env` from `.env.example`
 
 ## API Limits
 
