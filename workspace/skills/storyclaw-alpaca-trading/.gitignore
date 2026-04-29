@@ -1,0 +1,4 @@
+credentials/*.json
+!credentials/example.json
+config.json
+state/

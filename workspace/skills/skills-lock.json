@@ -5,6 +5,12 @@
       "source": "machina-sports/sports-skills",
       "sourceType": "github",
       "computedHash": "70e9410477f0551b0fb0e794fa450b080314a79f872835574d500f32d136f7cf"
+    },
+    "storyclaw-alpaca-trading": {
+      "source": "storyclaw-official/talenthub",
+      "sourceType": "github",
+      "skillPath": "skills/storyclaw-alpaca-trading/SKILL.md",
+      "computedHash": "944876c0fb0f0add62d829841aa637b8657389f066bd02dc45350abd518ee8c0"
     }
   }
 }
