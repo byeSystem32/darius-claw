@@ -1,46 +1,67 @@
 #!/usr/bin/env node
 /**
  * Multi-User Config Loader
- * Loads user-specific config from credentials/{USER_ID}.json
+ * Loads Alpaca credentials from environment variables or a local .env file.
  */
 
 const fs = require("fs");
 const path = require("path");
 
+const DEFAULT_BASE_URL = "https://paper-api.alpaca.markets";
+const DEFAULT_DATA_URL = "https://data.alpaca.markets";
+
+function parseEnvFile(envPath) {
+  if (!fs.existsSync(envPath)) return {};
+
+  return fs
+    .readFileSync(envPath, "utf8")
+    .split(/\r?\n/)
+    .reduce((values, line) => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) return values;
+
+      const separator = trimmed.indexOf("=");
+      if (separator === -1) return values;
+
+      const key = trimmed.slice(0, separator).trim();
+      let value = trimmed.slice(separator + 1).trim();
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+
+      values[key] = value;
+      return values;
+    }, {});
+}
+
 function loadUserConfig(exitOnMissing = true) {
   const USER_ID = process.env.USER_ID || process.env.TELEGRAM_USER_ID;
+  const envPath = path.join(__dirname, "..", ".env");
+  const envConfig = parseEnvFile(envPath);
 
-  if (!USER_ID) {
+  const config = {
+    apiKey: process.env.ALPACA_API_KEY || envConfig.ALPACA_API_KEY || "",
+    apiSecret: process.env.ALPACA_API_SECRET || envConfig.ALPACA_API_SECRET || "",
+    baseUrl: process.env.ALPACA_BASE_URL || envConfig.ALPACA_BASE_URL || DEFAULT_BASE_URL,
+    dataUrl: process.env.ALPACA_DATA_URL || envConfig.ALPACA_DATA_URL || DEFAULT_DATA_URL,
+    userId: USER_ID || process.env.USERNAME || "default",
+  };
+
+  const exists = !!config.apiKey && !!config.apiSecret;
+  if (!exists) {
     if (exitOnMissing) {
-      console.error("❌ USER_ID or TELEGRAM_USER_ID environment variable required");
-      console.error("   Set it when calling the script: USER_ID=1234567890 node trading.js ...");
+      console.error("❌ Alpaca API credentials not configured");
+      console.error(`   Create: ${envPath}`);
+      console.error("   Copy from: .env.example");
+      console.error("   Required: ALPACA_API_KEY and ALPACA_API_SECRET");
       process.exit(1);
     }
-    return { config: null, userId: null, credentialsPath: null, exists: false };
   }
 
-  const credentialsPath = path.join(__dirname, "..", "credentials", `${USER_ID}.json`);
-
-  if (!fs.existsSync(credentialsPath)) {
-    if (exitOnMissing) {
-      console.error(`❌ No config found for user ${USER_ID}`);
-      console.error(`   Create: ${credentialsPath}`);
-      console.error(`   Copy from: config.example.json`);
-      process.exit(1);
-    }
-    return { config: null, userId: USER_ID, credentialsPath, exists: false };
-  }
-
-  try {
-    const config = JSON.parse(fs.readFileSync(credentialsPath, "utf8"));
-    return { config, userId: USER_ID, credentialsPath, exists: true };
-  } catch (e) {
-    if (exitOnMissing) {
-      console.error(`❌ Failed to load config for user ${USER_ID}: ${e.message}`);
-      process.exit(1);
-    }
-    return { config: null, userId: USER_ID, credentialsPath, exists: false, error: e.message };
-  }
+  return { config, userId: config.userId, credentialsPath: envPath, exists };
 }
 
 // Check if user is configured (soft mode, doesn't exit)

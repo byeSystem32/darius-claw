@@ -13,16 +13,10 @@
  */
 
 const https = require("https");
-const fs = require("fs");
-const path = require("path");
 
 // 加载配置
-const CONFIG_PATH = path.join(__dirname, "..", "config.json");
-if (!fs.existsSync(CONFIG_PATH)) {
-  console.error("❌ config.json not found");
-  process.exit(1);
-}
-const config = JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8"));
+const { loadUserConfig } = require("./config-loader");
+const { config } = loadUserConfig();
 
 const API_KEY = config.apiKey;
 const API_SECRET = config.apiSecret;

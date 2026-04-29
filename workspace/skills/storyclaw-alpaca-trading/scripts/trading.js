@@ -115,9 +115,8 @@ const commands = {
     console.log(`  User: ${config.userId || "unknown"}`);
     if (!API_KEY || !API_SECRET) {
       console.log("\n⚠️ 请先配置 Alpaca API keys:");
-      console.log(
-        `   cp config.example.json credentials/${process.env.USER_ID || "YOUR_USER_ID"}.json`,
-      );
+      console.log("   cp .env.example .env");
+      console.log("   Then fill in ALPACA_API_KEY and ALPACA_API_SECRET");
     }
     return { configured: !!API_KEY && !!API_SECRET };
   },

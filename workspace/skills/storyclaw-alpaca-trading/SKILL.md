@@ -24,22 +24,26 @@ Trade US stocks and crypto via Alpaca API. Supports both **paper trading** (simu
 3. NEVER make up prices or data — always query real data
 4. NEVER assume what the user wants to trade — ask first
 
-## Multi-User Support
+## Credential Setup
 
-Each user has their own `credentials/{USER_ID}.json`:
+Create a local `.env` file from `.env.example`:
 
-```json
-{
-  "apiKey": "YOUR_KEY",
-  "apiSecret": "YOUR_SECRET",
-  "baseUrl": "https://paper-api.alpaca.markets",
-  "dataUrl": "https://data.alpaca.markets"
-}
+```bash
+cp .env.example .env
 ```
 
-To switch to real trading, change `baseUrl` to `https://api.alpaca.markets`.
+Then fill in:
 
-Or set `ALPACA_API_KEY` and `ALPACA_API_SECRET` env vars.
+```bash
+ALPACA_API_KEY=YOUR_KEY
+ALPACA_API_SECRET=YOUR_SECRET
+ALPACA_BASE_URL=https://paper-api.alpaca.markets
+ALPACA_DATA_URL=https://data.alpaca.markets
+```
+
+To switch to real trading, change `ALPACA_BASE_URL` to `https://api.alpaca.markets`.
+
+You can also set these as shell environment variables instead of using `.env`.
 
 ## First-Time User Flow
 
@@ -95,7 +99,7 @@ node {baseDir}/scripts/trading.js strategy-rsi AAPL  # RSI mean reversion
 
 1. Sign up at https://app.alpaca.markets/brokerage/new-account
 2. Generate API key + secret (Paper Trading section)
-3. Create `credentials/{USER_ID}.json` or set env vars
+3. Create `.env` from `.env.example` or set env vars
 
 ## API Limits
 
