@@ -23,6 +23,10 @@ jobs:
 
             mkdir -p /srv/darius-claw/workspace
             rsync -av --delete /tmp/darius-deploy/workspace/ /srv/darius-claw/workspace/
+            if [ -f /srv/darius-claw.env ]; then
+              install -d -m 700 /srv/darius-claw/workspace/.openclaw
+              install -m 644 /srv/darius-claw.env /srv/darius-claw/workspace/.openclaw/darius-claw.env
+            fi
 
             rm -rf /tmp/darius-deploy
 

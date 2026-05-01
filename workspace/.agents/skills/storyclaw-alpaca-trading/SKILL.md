@@ -26,7 +26,7 @@ Trade US stocks and crypto via Alpaca API. Supports both **paper trading** (simu
 
 ## Credential Setup
 
-For OpenClaw, configure these in `/srv/darius-claw.env` or as injected secrets/env vars:
+For OpenClaw, configure these in the runtime secret file or as injected secrets/env vars:
 
 ```bash
 ALPACA_API_KEY
@@ -56,6 +56,14 @@ ALPACA_DATA_URL=https://data.alpaca.markets
 ```
 
 To switch to real trading, set `ALPACA_BASE_URL` to `https://api.alpaca.markets`.
+
+The loader checks these OpenClaw paths:
+
+```bash
+/home/node/.openclaw/workspace/config/darius-claw.env
+/home/node/.openclaw/workspace/.openclaw/darius-claw.env
+/srv/darius-claw.env
+```
 
 ## First-Time User Flow
 

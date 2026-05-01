@@ -2,7 +2,7 @@
 /**
  * Multi-User Config Loader
  * Loads Alpaca credentials from OpenClaw secrets, /srv/darius-claw.env,
- * or a local .env file.
+ * an OpenClaw workspace secret file, or a local .env file.
  */
 
 const fs = require("fs");
@@ -10,7 +10,12 @@ const path = require("path");
 
 const DEFAULT_BASE_URL = "https://paper-api.alpaca.markets";
 const DEFAULT_DATA_URL = "https://data.alpaca.markets";
-const OPENCLAW_ENV_PATH = process.env.OPENCLAW_ENV_PATH || "/srv/darius-claw.env";
+const OPENCLAW_ENV_PATHS = [
+  "/home/node/.openclaw/workspace/config/darius-claw.env",
+  "/home/node/.openclaw/workspace/.openclaw/darius-claw.env",
+  "/srv/darius-claw.env",
+  process.env.OPENCLAW_ENV_PATH,
+].filter(Boolean);
 
 function parseEnvFile(envPath) {
   if (!fs.existsSync(envPath)) return {};
@@ -45,9 +50,11 @@ function parseEnvFile(envPath) {
 function loadUserConfig(exitOnMissing = true) {
   const USER_ID = process.env.USER_ID || process.env.TELEGRAM_USER_ID;
   const localEnvPath = path.join(__dirname, "..", ".env");
-  const openClawEnvConfig = parseEnvFile(OPENCLAW_ENV_PATH);
-  const localEnvConfig = parseEnvFile(localEnvPath);
-  const envConfig = { ...localEnvConfig, ...openClawEnvConfig };
+  const envFilePaths = [localEnvPath, ...OPENCLAW_ENV_PATHS];
+  const envConfig = envFilePaths.reduce(
+    (values, envPath) => ({ ...values, ...parseEnvFile(envPath) }),
+    {},
+  );
 
   const config = {
     apiKey: process.env.ALPACA_API_KEY || envConfig.ALPACA_API_KEY || "",
@@ -61,7 +68,8 @@ function loadUserConfig(exitOnMissing = true) {
   if (!exists) {
     if (exitOnMissing) {
       console.error("❌ Alpaca API credentials not configured");
-      console.error(`   OpenClaw: add ALPACA_API_KEY and ALPACA_API_SECRET to ${OPENCLAW_ENV_PATH}`);
+      console.error("   OpenClaw: add ALPACA_API_KEY and ALPACA_API_SECRET to one of:");
+      OPENCLAW_ENV_PATHS.forEach((envPath) => console.error(`     - ${envPath}`));
       console.error(`   Local fallback: copy .env.example to ${localEnvPath}`);
       console.error("   Required: ALPACA_API_KEY and ALPACA_API_SECRET");
       process.exit(1);
@@ -71,7 +79,7 @@ function loadUserConfig(exitOnMissing = true) {
   return {
     config,
     userId: config.userId,
-    credentialsPath: fs.existsSync(OPENCLAW_ENV_PATH) ? OPENCLAW_ENV_PATH : localEnvPath,
+    credentialsPath: [...envFilePaths].reverse().find((envPath) => fs.existsSync(envPath)),
     exists,
   };
 }
