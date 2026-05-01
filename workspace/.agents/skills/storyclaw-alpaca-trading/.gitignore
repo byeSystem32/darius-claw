@@ -1,0 +1,4 @@
+.env
+credentials/*.json
+config.json
+state/

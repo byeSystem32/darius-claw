@@ -10,6 +10,12 @@
       "source": "local",
       "sourceType": "local",
       "computedHash": "kalshi-trader-v1-2026-04-15"
+    },
+    "storyclaw-alpaca-trading": {
+      "source": "storyclaw-official/talenthub",
+      "sourceType": "github",
+      "skillPath": "skills/storyclaw-alpaca-trading/SKILL.md",
+      "computedHash": "944876c0fb0f0add62d829841aa637b8657389f066bd02dc45350abd518ee8c0"
     }
   }
 }
