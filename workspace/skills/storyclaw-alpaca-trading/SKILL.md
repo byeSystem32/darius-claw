@@ -26,7 +26,7 @@ Trade US stocks and crypto via Alpaca API. Supports both **paper trading** (simu
 
 ## Credential Setup
 
-For OpenClaw, configure these as secrets so they are injected as environment variables:
+For OpenClaw, configure these in `/srv/darius-claw.env` or as injected secrets/env vars:
 
 ```bash
 ALPACA_API_KEY
